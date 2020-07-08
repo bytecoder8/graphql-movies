@@ -70,7 +70,45 @@ const Query = new GraphQLObjectType({
   },
 })
 
+// Mutations
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addDirector: {
+      type: DirectorType,
+      args: {
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt }
+      },
+      resolve(parent, { name, age }) {
+        const director = new Director({
+          name,
+          age
+        })
+        return director.save()
+      }
+    },
+    addMovie: {
+      type: MovieType,
+      args: {
+        name: { type: GraphQLString },
+        genre: { type: GraphQLString },
+        directorId: { type: GraphQLID }
+      },
+      resolve(parent, { name, genre, directorId }) {
+        const movie = new Movie({
+          name,
+          genre,
+          directorId
+        })
+        return movie.save()
+      }
+    }
+  }
+})
+
 
 module.exports = new GraphQLSchema({
   query: Query,
+  mutation: Mutation
 })
