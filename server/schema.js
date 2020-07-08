@@ -49,6 +49,8 @@ const DirectorType = new GraphQLObjectType({
   })
 })
 
+
+// Queries
 const Query = new GraphQLObjectType({
   name: 'Query',
   fields: {
@@ -65,9 +67,22 @@ const Query = new GraphQLObjectType({
       resolve(parent, args) {
         return directors.find(director => director.id === args.id)
       }
+    },
+    movies: {
+      type: GraphQLList(MovieType),
+      resolve(parent, args) {
+        return movies
+      }
+    },
+    directors: {
+      type: GraphQLList(DirectorType),
+      resolve(parent, args) {
+        return directors
+      }
     }
   },
 })
+
 
 module.exports = new GraphQLSchema({
   query: Query,
