@@ -1,14 +1,19 @@
 import React from 'react'
 import './App.css'
 import Movies from './components/Movies'
+import Directors from './components/Directors'
+import Container from '@material-ui/core/Container'
+import SimpleTabs from './components/Tabs/Tabs'
 
 
 function App() {
   return (
-    <div className="App">
-      <h2>Movies</h2>
-      <Movies />
-    </div>
+    <Container maxWidth="md" className="App">
+      <SimpleTabs labels={['Movies', 'Directors']}>
+        <Movies />
+        <Directors />
+      </SimpleTabs>
+    </Container>
   )
 }
 
