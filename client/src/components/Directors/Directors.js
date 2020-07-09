@@ -19,7 +19,13 @@ const Directors = () => {
   const { loading, error, data } = useQuery(ALL_DIRECTORS)
   const [open, setOpen] = useState(false)
 
-  const handleOpen = () => setOpen(true)
+  const EMPTY_VALUES = { id: null, name: '', age: '' }
+  const [selectedValues, setSelectedValues] = useState(EMPTY_VALUES)
+
+  const handleOpen = (event, director = EMPTY_VALUES) => {
+    setSelectedValues(director)
+    setOpen(true)
+  }
 
 
   if (loading) return <p>Loading...</p>
@@ -40,13 +46,13 @@ const Directors = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.directors.map( ({ id, name, age, movies }) => (
-              <TableRow key={id}>
-                <TableCell>{ name }</TableCell>
-                <TableCell>{ age }</TableCell>
-                <TableCell>{ movies.map(movie => movie.name).join(', ') }</TableCell>
+            {data.directors.map( director => (
+              <TableRow key={director.id}>
+                <TableCell>{ director.name }</TableCell>
+                <TableCell>{ director.age }</TableCell>
+                <TableCell>{ director.movies.map(movie => movie.name).join(', ') }</TableCell>
                 <TableCell>
-                  <Button variant="outlined" color="primary" onClick={handleOpen}>
+                  <Button variant="outlined" color="primary" onClick={event => handleOpen(event, director)}>
                     Edit
                   </Button>
                 </TableCell>
@@ -55,7 +61,7 @@ const Directors = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <DirectorForm open={open} setOpen={setOpen} />
+      <DirectorForm open={open} setOpen={setOpen} selectedValues={ selectedValues } />
     </div>
   )
 }
