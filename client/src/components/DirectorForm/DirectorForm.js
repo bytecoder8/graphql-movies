@@ -27,7 +27,7 @@ const ADD_DIRECTOR = gql`
   }
 `
 const UPDATE_DIRECTOR = gql`
-mutation updateDirector($id: ID!, $name: String!, $age: Int!) {
+mutation updateDirector($id: ID!, $name: String, $age: Int) {
   updateDirector(id: $id, name: $name, age: $age) {
     id
     name
