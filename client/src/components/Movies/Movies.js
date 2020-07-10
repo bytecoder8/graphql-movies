@@ -7,6 +7,7 @@ import {
 
 import { ALL_MOVIES } from './queries'
 import MovieForm from '../MoviesForm'
+import MovieDeleteDialog from '../MovieDeleteDialog/MovieDeleteDialog'
 
 
 const Movies = () => {
@@ -22,6 +23,9 @@ const Movies = () => {
     setSelectedValues(movie)
     setOpen(true)
   }
+
+  // Delete Modal State
+  const [movieId, setMovieId] = useState(null)
 
 
   if (loading) return <p>Loading...</p>
@@ -50,6 +54,9 @@ const Movies = () => {
                   <Button variant="outlined" color="primary" onClick={event => handleOpen(event, movie)}>
                     Edit
                   </Button>
+                  <Button variant="outlined" color="secondary" onClick={event => setMovieId(movie.id)}>
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -57,6 +64,7 @@ const Movies = () => {
         </Table>
       </TableContainer>
       <MovieForm open={open} setOpen={setOpen} selectedValues={ selectedValues } />
+      <MovieDeleteDialog movieId={movieId} setMovieId={setMovieId} />
     </div>
   )
 }

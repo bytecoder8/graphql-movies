@@ -8,6 +8,7 @@ import {
 
 import { ALL_DIRECTORS } from './queries'
 import DirectorForm from '../DirectorForm'
+import DirectorDeleteDialog from '../DirectorDeleteDialog'
 
 
 const Directors = () => {
@@ -24,6 +25,8 @@ const Directors = () => {
     setOpen(true)
   }
 
+  // Delete Modal State
+  const [directorId, setDirectorId] = useState(null)
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error.toString()}</p>
@@ -52,6 +55,9 @@ const Directors = () => {
                   <Button variant="outlined" color="primary" onClick={event => handleOpen(event, director)}>
                     Edit
                   </Button>
+                  <Button variant="outlined" color="secondary" onClick={event => setDirectorId(director.id)}>
+                    Delete
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -59,6 +65,7 @@ const Directors = () => {
         </Table>
       </TableContainer>
       <DirectorForm open={open} setOpen={setOpen} selectedValues={ selectedValues } />
+      <DirectorDeleteDialog directorId={directorId} setDirectorId={setDirectorId} />
     </div>
   )
 }
