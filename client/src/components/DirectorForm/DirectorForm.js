@@ -49,10 +49,11 @@ const DirectorForm = (props) => {
 
 
   const handleChange = event => {
-    setValues({
-      ...values,
+    event.persist()
+    setValues(prevState => ({
+      ...prevState,
       [event.target.name]: event.target.value
-    })
+    }))
   }
 
   const [addDirector] = useMutation(ADD_DIRECTOR, {

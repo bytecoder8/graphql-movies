@@ -18,33 +18,33 @@ const MovieForm = (props) => {
   const directorsQuery = useQuery(ALL_DIRECTORS)
   let directors = []
 
-  if (directorsQuery.data) {
-    directors = directorsQuery.data.directors
-  }
-
-  const handleClose = () => setOpen(false)
-
   const [values, setValues] = useState(selectedValues)
   useEffect(() => {
     setValues(selectedValues)
   }, [selectedValues])
-
-
+  
+  if (directorsQuery.data) {
+    directors = directorsQuery.data.directors
+    // set first director
+    if (directors[0] && !values.directorId) {
+      setValues( prevState => ({
+        ...prevState, directorId: directors[0].id 
+      }))
+    }
+  }
+  
+  
+  const handleClose = () => setOpen(false)
   const handleChange = event => {
-    setValues({
-      ...values,
+    event.persist()
+    setValues(prevState => ({
+      ...prevState,
       [event.target.name]: event.target.value
-    })
+    }))
   }
 
   const [addMovie] = useMutation(ADD_MOVIE, {
-    update(cache, { data: { addMovie } }) {
-      const { movies } = cache.readQuery({ query: ALL_MOVIES })
-      cache.writeQuery({
-        query: ALL_MOVIES,
-        data: { movies: movies.concat([addMovie]) }
-      })
-    }
+    refetchQueries: [{ query: ALL_MOVIES }]
   })
   const [updateMovie] = useMutation(UPDATE_MOVIE)
 
