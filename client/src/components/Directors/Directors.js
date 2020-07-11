@@ -1,17 +1,16 @@
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 
-import { 
-  Table, TableBody, TableCell, TableRow, TableHead,
-  TableContainer, Paper, Button, Fab 
-} from '@material-ui/core'
+import { Fab } from '@material-ui/core'
 
 import { ALL_DIRECTORS } from './queries'
 import DirectorForm from '../DirectorForm'
 import DirectorDeleteDialog from '../DirectorDeleteDialog'
+import DirectorsTable from './DirectorsTable'
 
 
-const Directors = () => {
+const Directors = (props) => {
+  const { classes } = props
   const { loading, error, data } = useQuery(ALL_DIRECTORS)
 
   // Modal Form State
@@ -34,36 +33,10 @@ const Directors = () => {
 
   return(
     <div className="directors">
-      <Fab color="primary" onClick={handleOpen}>Add</Fab>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Age</TableCell>
-              <TableCell>Movies</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.directors.map( director => (
-              <TableRow key={director.id}>
-                <TableCell>{ director.name }</TableCell>
-                <TableCell>{ director.age }</TableCell>
-                <TableCell>{ director.movies.map(movie => movie.name).join(', ') }</TableCell>
-                <TableCell>
-                  <Button variant="outlined" color="primary" onClick={event => handleOpen(event, director)}>
-                    Edit
-                  </Button>
-                  <Button variant="outlined" color="secondary" onClick={event => setDirectorId(director.id)}>
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <div className={classes.wrapper}>
+        <Fab color="primary" onClick={handleOpen} className={classes.fab}>Add</Fab>
+        <DirectorsTable directors={data.directors} handleOpen={handleOpen} setDirectorId={setDirectorId} />
+      </div>
       <DirectorForm open={open} setOpen={setOpen} selectedValues={ selectedValues } />
       <DirectorDeleteDialog directorId={directorId} setDirectorId={setDirectorId} />
     </div>

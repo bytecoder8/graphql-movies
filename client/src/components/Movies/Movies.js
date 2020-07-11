@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/react-hooks'
-import { 
-  Table, TableBody, TableCell, TableRow, TableHead,
-  TableContainer, Paper, Button, Fab 
-} from '@material-ui/core'
+import { Fab } from '@material-ui/core'
 
 import { ALL_MOVIES } from './queries'
+import MoviesTable from './MoviesTable'
 import MovieForm from '../MoviesForm'
-import MovieDeleteDialog from '../MovieDeleteDialog/MovieDeleteDialog'
+import MovieDeleteDialog from '../MovieDeleteDialog'
 
 
-const Movies = () => {
+const Movies = (props) => {
+  const { classes} = props
   const { loading, error, data } = useQuery(ALL_MOVIES)
 
   // Modal Form State
@@ -33,36 +32,10 @@ const Movies = () => {
 
   return(
     <div className="movies">
-      <Fab color="primary" onClick={handleOpen}>Add</Fab>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Genre</TableCell>
-              <TableCell>Director</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {data.movies.map( movie => (
-              <TableRow key={ movie.id }>
-                <TableCell>{ movie.name }</TableCell>
-                <TableCell>{ movie.genre }</TableCell>
-                <TableCell>{ movie.directorId }</TableCell>
-                <TableCell>
-                  <Button variant="outlined" color="primary" onClick={event => handleOpen(event, movie)}>
-                    Edit
-                  </Button>
-                  <Button variant="outlined" color="secondary" onClick={event => setMovieId(movie.id)}>
-                    Delete
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <div className={classes.wrapper}>
+        <Fab className={classes.fab} color="primary" onClick={handleOpen}>Add</Fab>
+        <MoviesTable movies={data.movies} handleOpen={handleOpen} setMovieId={setMovieId} />
+      </div>
       <MovieForm open={open} setOpen={setOpen} selectedValues={ selectedValues } />
       <MovieDeleteDialog movieId={movieId} setMovieId={setMovieId} />
     </div>
