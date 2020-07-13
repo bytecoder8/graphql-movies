@@ -25,7 +25,7 @@ export default function MoviesTable(props) {
             <TableRow key={ movie.id }>
               <TableCell>{ movie.name }</TableCell>
               <TableCell>{ movie.genre }</TableCell>
-              <TableCell>{ movie.directorId }</TableCell>
+              <TableCell>{ movie.director ? movie.director.name : 'Invalid' }</TableCell>
               <TableCell>
                 <Button variant="outlined" color="primary" onClick={event => handleOpen(event, movie)}>
                   Edit

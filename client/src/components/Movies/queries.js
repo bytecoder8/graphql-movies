@@ -8,6 +8,10 @@ export const ALL_MOVIES = gql`
     name
     genre
     directorId
+    director {
+      id
+      name
+    }
   }
 }
 `

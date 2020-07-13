@@ -3,6 +3,7 @@ import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
 import { ALL_MOVIES } from '../Movies/queries'
+import { ALL_DIRECTORS } from '../Directors/queries'
 
 
 import { 
@@ -28,7 +29,7 @@ const MovieDeleteDialog = props => {
   const handleClose = () => setMovieId(null)
 
   const [removeMovie] = useMutation(REMOVE_MOVIE, {
-    refetchQueries: [{query: ALL_MOVIES}]
+    refetchQueries: [{query: ALL_MOVIES}, {query: ALL_DIRECTORS}]
   })
 
   const handleSubmit = event => {

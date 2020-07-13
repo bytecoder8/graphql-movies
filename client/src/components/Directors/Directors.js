@@ -30,7 +30,6 @@ const Directors = (props) => {
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error.toString()}</p>
 
-
   return(
     <div className="directors">
       <div className={classes.wrapper}>

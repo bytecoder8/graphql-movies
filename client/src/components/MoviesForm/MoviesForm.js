@@ -9,13 +9,15 @@ import {
 
 
 import { ALL_MOVIES } from '../Movies/queries'
-import { ALL_DIRECTORS } from './queries'
+import { ALL_DIRECTORS_SELECT } from './queries'
 import { ADD_MOVIE, UPDATE_MOVIE } from './mutations'
+
+import { ALL_DIRECTORS } from '../Directors/queries'
 
 const MovieForm = (props) => {
   const { open, setOpen, selectedValues } = props
 
-  const directorsQuery = useQuery(ALL_DIRECTORS)
+  const directorsQuery = useQuery(ALL_DIRECTORS_SELECT)
   let directors = []
 
   const [values, setValues] = useState(selectedValues)
@@ -44,9 +46,11 @@ const MovieForm = (props) => {
   }
 
   const [addMovie] = useMutation(ADD_MOVIE, {
-    refetchQueries: [{ query: ALL_MOVIES }]
+    refetchQueries: [{query: ALL_MOVIES}, {query: ALL_DIRECTORS}]
   })
-  const [updateMovie] = useMutation(UPDATE_MOVIE)
+  const [updateMovie] = useMutation(UPDATE_MOVIE, {
+    refetchQueries: [{query: ALL_MOVIES}, {query: ALL_DIRECTORS}]
+  })
 
   const handleSubmit = event => {
     event.preventDefault()
