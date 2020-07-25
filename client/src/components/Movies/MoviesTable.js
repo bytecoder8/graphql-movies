@@ -2,12 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { 
   Table, TableBody, TableCell, TableRow, TableHead,
-  TableContainer, Paper, Button 
+  TableContainer, Paper, Button, Checkbox
 } from '@material-ui/core'
 
 
 export default function MoviesTable(props) {
-  const { movies, handleOpen, setMovieId } = props
+  const { movies, handleOpen, setMovieId, handleClickWatched } = props
+
+  const handleWatchedChange = ({target}, id) => {
+    handleClickWatched(id, target.checked)
+  }
 
   return(
     <TableContainer component={Paper}>
@@ -27,7 +31,9 @@ export default function MoviesTable(props) {
               <TableCell>{ movie.name }</TableCell>
               <TableCell>{ movie.genre }</TableCell>
               <TableCell>{ movie.director ? movie.director.name : 'Invalid' }</TableCell>
-              <TableCell>{ movie.watched ? 'watched' : 'no' }</TableCell>
+              <TableCell>
+                <Checkbox checked={movie.watched} value={true} onChange={event => handleWatchedChange(event, movie.id)} name="watched" />
+              </TableCell>
               <TableCell>
                 <Button variant="outlined" color="primary" onClick={event => handleOpen(event, movie)}>
                   Edit
@@ -47,5 +53,6 @@ export default function MoviesTable(props) {
 MoviesTable.propTypes = {
   movies: PropTypes.arrayOf(PropTypes.any),
   handleOpen: PropTypes.func.isRequired,
-  setMovieId: PropTypes.func.isRequired
+  setMovieId: PropTypes.func.isRequired,
+  handleClickWatched: PropTypes.func.isRequired
 }
