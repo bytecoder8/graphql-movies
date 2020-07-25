@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { Fab } from '@material-ui/core'
 
 import { ALL_MOVIES } from './queries'
+import { EMPTY_MOVIE } from '../../constants'
 import MoviesTable from './MoviesTable'
 import MovieForm from '../MoviesForm'
 import MovieDeleteDialog from '../MovieDeleteDialog'
@@ -15,10 +16,9 @@ const Movies = (props) => {
   // Modal Form State
   const [open, setOpen] = useState(false)
 
-  const EMPTY_VALUES = { id: null, name: '', genre: '', directorId: '' }
-  const [selectedValues, setSelectedValues] = useState(EMPTY_VALUES)
+  const [selectedValues, setSelectedValues] = useState(EMPTY_MOVIE)
 
-  const handleOpen = (event, movie = EMPTY_VALUES) => {
+  const handleOpen = (event, movie = EMPTY_MOVIE) => {
     setSelectedValues(movie)
     setOpen(true)
   }

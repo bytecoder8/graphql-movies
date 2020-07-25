@@ -11,6 +11,7 @@ export const ALL_DIRECTORS = gql`
         id
         name
         genre
+        watched
       }
     }
   }

@@ -7,6 +7,7 @@ export const ALL_MOVIES = gql`
     id
     name
     genre
+    watched
     directorId
     director {
       id

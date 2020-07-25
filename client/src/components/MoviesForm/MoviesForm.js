@@ -4,7 +4,7 @@ import { useQuery, useMutation } from '@apollo/react-hooks'
 
 import { 
   Dialog, DialogActions, DialogContent, DialogTitle, FormControl,
-  TextField, Select, Button, InputLabel
+  TextField, Select, Button, InputLabel, Checkbox, FormControlLabel
 } from '@material-ui/core'
 
 
@@ -13,6 +13,7 @@ import { ALL_DIRECTORS_SELECT } from './queries'
 import { ADD_MOVIE, UPDATE_MOVIE } from './mutations'
 
 import { ALL_DIRECTORS } from '../Directors/queries'
+
 
 const MovieForm = (props) => {
   const { open, setOpen, selectedValues } = props
@@ -36,13 +37,20 @@ const MovieForm = (props) => {
   }
   
   
-  const handleClose = () => setOpen(false)
+  const handleClose = () => {
+    setOpen(false)
+    setValues(selectedValues)
+  }
   const handleChange = event => {
     event.persist()
-    setValues(prevState => ({
-      ...prevState,
-      [event.target.name]: event.target.value
-    }))
+    setValues(prevState => {
+      const { target: { name, type, checked, value } } = event
+      const val = type === 'checkbox' ? checked : value
+      return ({
+        ...prevState,
+        [name]: val
+      })
+    })
   }
 
   const [addMovie] = useMutation(ADD_MOVIE, {
@@ -54,14 +62,15 @@ const MovieForm = (props) => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    const { id, name, genre, directorId } = values
+    const { id, name, genre, directorId, watched } = values
 
     if (!id) {
       addMovie({ 
         variables: {
           name,
           genre,
-          directorId
+          directorId,
+          watched
         } 
       })
     } else {
@@ -70,7 +79,8 @@ const MovieForm = (props) => {
           id,
           name,
           genre,
-          directorId
+          directorId,
+          watched
         }
       })
     }
@@ -99,6 +109,10 @@ const MovieForm = (props) => {
             )}
           </Select>
         </FormControl>
+        <FormControlLabel
+          control={<Checkbox checked={values.watched} value={true} onChange={handleChange} name="watched" />}
+          label="Watched"
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
@@ -116,6 +130,7 @@ MovieForm.propTypes = {
     name: PropTypes.string.isRequired,
     genre: PropTypes.string.isRequired,
     directorId: PropTypes.string.isRequired,
+    watched: PropTypes.bool.isRequired
   })
 }
 

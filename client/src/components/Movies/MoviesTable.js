@@ -17,6 +17,7 @@ export default function MoviesTable(props) {
             <TableCell>Name</TableCell>
             <TableCell>Genre</TableCell>
             <TableCell>Director</TableCell>
+            <TableCell>Watched</TableCell>
             <TableCell>Actions</TableCell>
           </TableRow>
         </TableHead>
@@ -26,6 +27,7 @@ export default function MoviesTable(props) {
               <TableCell>{ movie.name }</TableCell>
               <TableCell>{ movie.genre }</TableCell>
               <TableCell>{ movie.director ? movie.director.name : 'Invalid' }</TableCell>
+              <TableCell>{ movie.watched ? 'watched' : 'no' }</TableCell>
               <TableCell>
                 <Button variant="outlined" color="primary" onClick={event => handleOpen(event, movie)}>
                   Edit
