@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
@@ -24,12 +25,13 @@ export const REMOVE_MOVIE = gql`
 `
 
 const MovieDeleteDialog = props => {
-  const { movieId, setMovieId } = props
+  const { movieId, setMovieId, onDeleted } = props
 
   const handleClose = () => setMovieId(null)
 
   const [removeMovie] = useMutation(REMOVE_MOVIE, {
-    refetchQueries: [{query: ALL_MOVIES}, {query: ALL_DIRECTORS}]
+    refetchQueries: [{query: ALL_MOVIES}, {query: ALL_DIRECTORS}],
+    onCompleted: () => onDeleted()
   })
 
   const handleSubmit = event => {
@@ -54,6 +56,16 @@ const MovieDeleteDialog = props => {
       </DialogActions>
     </Dialog>
   )
+}
+
+MovieDeleteDialog.propTypes = {
+  movieId: PropTypes.string.isRequired,
+  setMovieId: PropTypes.func.isRequired,
+  onDeleted: PropTypes.func
+}
+
+MovieDeleteDialog.defaultProps = {
+  onDeleted() {}
 }
 
 

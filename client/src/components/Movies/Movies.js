@@ -50,6 +50,8 @@ const Movies = (props) => {
   // Delete Modal State
   const [movieId, setMovieId] = useState(null)
 
+  const applySearch = () => name && fetchByField(name)
+
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error.toString()}</p>
@@ -74,10 +76,10 @@ const Movies = (props) => {
         open={open}
         setOpen={setOpen}
         selectedValues={ selectedValues }
-        onCreated={ e => name && fetchByField(name) }
-        onUpdated={ e => name && fetchByField(name) }
+        onCreated={ applySearch }
+        onUpdated={ applySearch }
       />
-      <MovieDeleteDialog movieId={movieId} setMovieId={setMovieId} />
+      {movieId && <MovieDeleteDialog movieId={movieId} setMovieId={setMovieId} onDeleted={ applySearch } />}
     </div>
   )
 }

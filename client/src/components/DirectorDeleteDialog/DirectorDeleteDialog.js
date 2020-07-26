@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/react-hooks'
 import { gql } from 'apollo-boost'
 
@@ -20,12 +21,13 @@ export const REMOVE_DIRECTOR = gql`
 `
 
 const DirectorDeleteDialog = props => {
-  const { directorId, setDirectorId } = props
+  const { directorId, setDirectorId, onDeleted } = props
 
   const handleClose = () => setDirectorId(null)
 
   const [removeDirector] = useMutation(REMOVE_DIRECTOR, {
-    refetchQueries: [{query: ALL_DIRECTORS}]
+    refetchQueries: [{query: ALL_DIRECTORS}],
+    onCompleted() { onDeleted() }
   })
 
   const handleSubmit = event => {
@@ -51,6 +53,17 @@ const DirectorDeleteDialog = props => {
     </Dialog>
   )
 }
+
+DirectorDeleteDialog.propTypes = {
+  directorId: PropTypes.string.isRequired,
+  setDirectorId: PropTypes.func.isRequired,
+  onDeleted: PropTypes.func
+}
+
+DirectorDeleteDialog.defaultProps = {
+  onDeleted() {}
+}
+
 
 
 export default DirectorDeleteDialog

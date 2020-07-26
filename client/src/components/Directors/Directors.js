@@ -37,6 +37,9 @@ const Directors = (props) => {
   // Delete Modal State
   const [directorId, setDirectorId] = useState(null)
 
+  const applySearch = () => name && fetchByField(name)
+
+
   if (loading) return <p>Loading...</p>
   if (error) return <p>Error: {error.toString()}</p>
 
@@ -55,10 +58,10 @@ const Directors = (props) => {
         open={open}
         setOpen={setOpen}
         selectedValues={ selectedValues }
-        onCreated={ e => name && fetchByField(name) }
-        onUpdated={ e => name && fetchByField(name) }
+        onCreated={ applySearch }
+        onUpdated={ applySearch }
       />
-      <DirectorDeleteDialog directorId={directorId} setDirectorId={setDirectorId} />
+      {directorId && <DirectorDeleteDialog directorId={directorId} setDirectorId={setDirectorId} onDeleted={applySearch} />}
     </div>
   )
 }
