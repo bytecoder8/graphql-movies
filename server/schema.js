@@ -65,8 +65,13 @@ const Query = new GraphQLObjectType({
     },
     directors: {
       type: GraphQLList(DirectorType),
-      resolve(parent, args) {
-        return Director.find()
+      args: { name: { type: GraphQLString } },
+      resolve(parent, { name }) {
+        if (name) {
+          return Director.find({ 'name': { '$regex': name, '$options': 'i' } })
+        } else {
+          return Director.find()
+        }
       }
     }
   },
