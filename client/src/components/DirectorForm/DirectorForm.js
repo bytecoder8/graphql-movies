@@ -38,7 +38,7 @@ mutation updateDirector($id: ID!, $name: String, $age: Int) {
 
 
 const DirectorForm = (props) => {
-  const { open, setOpen, selectedValues } = props
+  const { open, setOpen, selectedValues, onCreated, onUpdated } = props
 
   const handleClose = () => setOpen(false)
 
@@ -63,9 +63,12 @@ const DirectorForm = (props) => {
         query: ALL_DIRECTORS,
         data: { directors: directors.concat([addDirector]) }
       })
-    }
+    },
+    onCompleted: () => onCreated()
   })
-  const [updateDirector] = useMutation(UPDATE_DIRECTOR)
+  const [updateDirector] = useMutation(UPDATE_DIRECTOR, {
+    onCompleted: () => onUpdated()
+  })
 
   const handleSubmit = event => {
     event.preventDefault()
@@ -92,7 +95,7 @@ const DirectorForm = (props) => {
 
   return(
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add new director</DialogTitle>
+      <DialogTitle>{ !values.id ? 'Add New Director' : 'Update Director'}</DialogTitle>
       <DialogContent>
         <TextField label="name" name="name" value={values.name} onChange={handleChange}></TextField>
         <TextField label="age" name="age" value={values.age} onChange={handleChange}></TextField>
@@ -112,7 +115,14 @@ DirectorForm.propTypes = {
     id: PropTypes.any,
     name: PropTypes.string.isRequired,
     age: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]).isRequired
-  })
+  }),
+  onCreated: PropTypes.func,
+  onUpdated: PropTypes.func
+}
+
+DirectorForm.defaultProps = {
+  onCreated() {},
+  onUpdated() {}
 }
 
 

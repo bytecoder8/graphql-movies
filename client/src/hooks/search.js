@@ -3,7 +3,7 @@ import { useState } from 'react'
 
 export default function useSearch(fieldName, fetchMore) {
   const [name, setName] = useState('')
-  const fetchByName = name => {
+  const fetchByField = name => {
     fetchMore({
       variables: { [fieldName]: name },
       updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult
@@ -11,19 +11,20 @@ export default function useSearch(fieldName, fetchMore) {
   }
   const handleSearch = ({ charCode, target: { value } }) => {
     if (charCode === 13) {
-      fetchByName(value)
+      fetchByField(value)
     }
   }
   const handleSearchNameChange = ({ target: { value } }) => {
     setName(value)
     if (value === '') {
-      fetchByName(value)
+      fetchByField(value)
     }
   }
 
   return {
-    name,
+    [fieldName]: name,
     handleSearch,
-    handleSearchNameChange
+    handleSearchNameChange,
+    fetchByField
   }
 }

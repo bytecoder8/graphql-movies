@@ -19,7 +19,8 @@ const Directors = (props) => {
   const {
     name,
     handleSearch,
-    handleSearchNameChange
+    handleSearchNameChange,
+    fetchByField
   } = useSearch('name', fetchMore)
 
   // Modal Form State
@@ -50,7 +51,13 @@ const Directors = (props) => {
         />
         <DirectorsTable directors={data.directors} handleOpen={handleOpen} setDirectorId={setDirectorId} />
       </div>
-      <DirectorForm open={open} setOpen={setOpen} selectedValues={ selectedValues } />
+      <DirectorForm
+        open={open}
+        setOpen={setOpen}
+        selectedValues={ selectedValues }
+        onCreated={ e => name && fetchByField(name) }
+        onUpdated={ e => name && fetchByField(name) }
+      />
       <DirectorDeleteDialog directorId={directorId} setDirectorId={setDirectorId} />
     </div>
   )

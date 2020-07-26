@@ -59,8 +59,13 @@ const Query = new GraphQLObjectType({
     },
     movies: {
       type: GraphQLList(MovieType),
-      resolve(parent, args) {
-        return Movie.find()
+      args: { name: { type: GraphQLString } },
+      resolve(parent, { name }) {
+        if (name) {
+          return Movie.find({ 'name': { '$regex': name, '$options': 'i' } })
+        } else {
+          return Movie.find()
+        }
       }
     },
     directors: {

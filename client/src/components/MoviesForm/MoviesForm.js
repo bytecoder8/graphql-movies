@@ -16,7 +16,7 @@ import { ALL_DIRECTORS } from '../Directors/queries'
 
 
 const MovieForm = (props) => {
-  const { open, setOpen, selectedValues } = props
+  const { open, setOpen, selectedValues, onCreated, onUpdated } = props
 
   const directorsQuery = useQuery(ALL_DIRECTORS_SELECT)
   let directors = []
@@ -54,10 +54,12 @@ const MovieForm = (props) => {
   }
 
   const [addMovie] = useMutation(ADD_MOVIE, {
-    refetchQueries: [{query: ALL_MOVIES}, {query: ALL_DIRECTORS}]
+    refetchQueries: [{query: ALL_MOVIES}, {query: ALL_DIRECTORS}],
+    onCompleted: () => onCreated()
   })
   const [updateMovie] = useMutation(UPDATE_MOVIE, {
-    refetchQueries: [{query: ALL_MOVIES}, {query: ALL_DIRECTORS}]
+    refetchQueries: [{query: ALL_MOVIES}, {query: ALL_DIRECTORS}],
+    onCompleted: () => onUpdated()
   })
 
   const handleSubmit = event => {
@@ -89,7 +91,7 @@ const MovieForm = (props) => {
 
   return(
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Add new movie</DialogTitle>
+      <DialogTitle>{ !values.id ? 'Add New Movie' : 'Update Movie' }</DialogTitle>
       <DialogContent>
         <TextField label="name" name="name" value={values.name} onChange={handleChange} />
         <TextField label="genre" name="genre" value={values.genre} onChange={handleChange} />
@@ -130,8 +132,15 @@ MovieForm.propTypes = {
     name: PropTypes.string.isRequired,
     genre: PropTypes.string.isRequired,
     directorId: PropTypes.string.isRequired,
-    watched: PropTypes.bool.isRequired
+    watched: PropTypes.bool.isRequired,
+    onCreated: PropTypes.func,
+    onUpdated: PropTypes.func
   })
+}
+
+MovieForm.defaultProps = {
+  onCreated() {},
+  onUpdated() {}
 }
 
 
