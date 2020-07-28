@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
 import { useMutation } from '@apollo/react-hooks'
@@ -21,11 +21,6 @@ const DirectorForm = (props) => {
 
   const handleClose = () => setOpen(false)
 
-  const [values, setValues] = useState(selectedValues)
-  useEffect(() => {
-    setValues(selectedValues)
-  }, [selectedValues])
-
 
   const [addDirector] = useMutation(ADD_DIRECTOR, {
     update(cache, { data: { addDirector } }) {
@@ -42,7 +37,8 @@ const DirectorForm = (props) => {
   })
 
   const onSubmit = data => {
-    const { id, name, age } = data
+    const { id } = selectedValues
+    const { name, age } = data
 
     if (!id) {
       addDirector({ 
@@ -66,13 +62,13 @@ const DirectorForm = (props) => {
   return(
     <Dialog open={open} onClose={handleClose}>
       <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
-        <DialogTitle>{ !values.id ? 'Add New Director' : 'Update Director'}</DialogTitle>
+        <DialogTitle>{ !selectedValues.id ? 'Add New Director' : 'Update Director'}</DialogTitle>
         <DialogContent>
           <div>
             <TextField
               label="Name"
               name="name"
-              
+              defaultValue={selectedValues.name}
               inputRef={register({ required: true })}
               error={!!errors.name}
             />
@@ -82,7 +78,7 @@ const DirectorForm = (props) => {
               label="Age"
               name="age"
               type="number"
-  
+              defaultValue={selectedValues.age}
               inputRef={register({ required: true })}
               error={!!errors.age}
             />
