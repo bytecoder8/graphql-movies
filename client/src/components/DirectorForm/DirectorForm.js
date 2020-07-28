@@ -1,44 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { gql }  from 'apollo-boost'
+
 import { useMutation } from '@apollo/react-hooks'
+import { useForm } from 'react-hook-form'
+import { 
+    Dialog, DialogActions, DialogContent, DialogTitle,
+    TextField, Button 
+} from '@material-ui/core'
 
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
-
+import { ADD_DIRECTOR, UPDATE_DIRECTOR } from './mutations'
 import { ALL_DIRECTORS } from '../Directors/queries'
-
-
-const ADD_DIRECTOR = gql`
-  mutation addDirector($name: String!, $age: Int!) {
-    addDirector(name: $name, age: $age) {
-      id
-      name
-      age
-
-      movies {
-        id
-      }
-    }
-  }
-`
-const UPDATE_DIRECTOR = gql`
-mutation updateDirector($id: ID!, $name: String, $age: Int) {
-  updateDirector(id: $id, name: $name, age: $age) {
-    id
-    name
-    age
-  }
-}
-`
 
 
 const DirectorForm = (props) => {
   const { open, setOpen, selectedValues, onCreated, onUpdated } = props
+
+  const { register, errors, formState, handleSubmit } = useForm({
+    mode: 'onSubmit'
+  })
 
   const handleClose = () => setOpen(false)
 
@@ -47,14 +26,6 @@ const DirectorForm = (props) => {
     setValues(selectedValues)
   }, [selectedValues])
 
-
-  const handleChange = event => {
-    event.persist()
-    setValues(prevState => ({
-      ...prevState,
-      [event.target.name]: event.target.value
-    }))
-  }
 
   const [addDirector] = useMutation(ADD_DIRECTOR, {
     update(cache, { data: { addDirector } }) {
@@ -70,9 +41,8 @@ const DirectorForm = (props) => {
     onCompleted: () => onUpdated()
   })
 
-  const handleSubmit = event => {
-    event.preventDefault()
-    const { id, name, age } = values
+  const onSubmit = data => {
+    const { id, name, age } = data
 
     if (!id) {
       addDirector({ 
@@ -95,15 +65,38 @@ const DirectorForm = (props) => {
 
   return(
     <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>{ !values.id ? 'Add New Director' : 'Update Director'}</DialogTitle>
-      <DialogContent>
-        <TextField label="name" name="name" value={values.name} onChange={handleChange}></TextField>
-        <TextField label="age" name="age" value={values.age} onChange={handleChange}></TextField>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button color="primary" onClick={handleSubmit}>Submit</Button>
-      </DialogActions>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate autoComplete="off">
+        <DialogTitle>{ !values.id ? 'Add New Director' : 'Update Director'}</DialogTitle>
+        <DialogContent>
+          <div>
+            <TextField
+              label="Name"
+              name="name"
+              
+              inputRef={register({ required: true })}
+              error={!!errors.name}
+            />
+          </div>
+          <div>
+            <TextField
+              label="Age"
+              name="age"
+              type="number"
+  
+              inputRef={register({ required: true })}
+              error={!!errors.age}
+            />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button
+            type="submit"
+            color="primary"
+            disabled={ formState.isSubmitting }
+          >Submit</Button>
+        </DialogActions>
+      </form>
     </Dialog>
   )
 }
