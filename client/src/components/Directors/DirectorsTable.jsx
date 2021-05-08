@@ -2,12 +2,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { 
   Table, TableBody, TableCell, TableRow, TableHead,
-  TableContainer, Paper, Button 
+  TableContainer, Paper, Button, withStyles
 } from '@material-ui/core'
 
 
-export default function DirectorsTable(props) {
-  const { directors, handleOpen, setDirectorId } = props
+const styles = {
+  editButton: {
+    marginRight: '5px'
+  }
+}
+
+function DirectorsTable(props) {
+  const { directors, handleOpen, setDirectorId, classes } = props
 
   return(
     <TableContainer component={Paper}>
@@ -27,7 +33,7 @@ export default function DirectorsTable(props) {
               <TableCell>{ director.age }</TableCell>
               <TableCell>{ director.movies.map(movie => movie.name).join(', ') }</TableCell>
               <TableCell>
-                <Button variant="outlined" color="primary" onClick={event => handleOpen(event, director)}>
+                <Button variant="outlined" color="primary" onClick={event => handleOpen(event, director)} className={classes.editButton}>
                   Edit
                 </Button>
                 <Button variant="outlined" color="secondary" onClick={event => setDirectorId(director.id)}>
@@ -47,3 +53,5 @@ DirectorsTable.propTypes = {
   handleOpen: PropTypes.func.isRequired,
   setDirectorId: PropTypes.func.isRequired
 }
+
+export default withStyles(styles)(DirectorsTable)

@@ -9,7 +9,7 @@ export default function DirectorsSearch(props) {
   return(
     <TextField
       label="Search"
-      placeholder="Type name..."
+      placeholder="Type a name..."
       onChange={ handleChange }
       onKeyPress={ handleSearch }
       value={ name }

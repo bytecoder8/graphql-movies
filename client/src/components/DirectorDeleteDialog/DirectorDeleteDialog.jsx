@@ -8,7 +8,7 @@ import { ALL_DIRECTORS } from '../Directors/queries'
 
 import { 
   Dialog, DialogActions, DialogTitle, DialogContentText,
-  Button
+  Button, withStyles
 } from '@material-ui/core'
 
 
@@ -20,8 +20,15 @@ export const REMOVE_DIRECTOR = gql`
   }
 `
 
+const styles = {
+  body: {
+    padding: '10px 15px'
+  }
+}
+
+
 const DirectorDeleteDialog = props => {
-  const { directorId, setDirectorId, onDeleted } = props
+  const { directorId, setDirectorId, onDeleted, classes } = props
 
   const handleClose = () => setDirectorId(null)
 
@@ -43,7 +50,7 @@ const DirectorDeleteDialog = props => {
   return(
     <Dialog open={ !!directorId } onClose={handleClose}>
       <DialogTitle>Deleting Director</DialogTitle>
-      <DialogContentText>
+      <DialogContentText className={classes.body}>
         Are you sure you want to delete this director?
       </DialogContentText>
       <DialogActions>
@@ -66,4 +73,4 @@ DirectorDeleteDialog.defaultProps = {
 
 
 
-export default DirectorDeleteDialog
+export default withStyles(styles)(DirectorDeleteDialog)

@@ -17,8 +17,7 @@ TabPanel.propTypes = {
   index: PropTypes.any.isRequired
 }
 
-const SimpleTabs = (props) => {
-  const { children, labels } = props
+const SimpleTabs = ({ children, labels }) => {
   const [value, setValue] = useState(0)
 
   const handleChange = (event, newValue) => setValue(newValue)

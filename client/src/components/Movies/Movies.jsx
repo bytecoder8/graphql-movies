@@ -12,9 +12,7 @@ import MoviesSearch from './MoviesSearch'
 import useSearch from '../../hooks/search'
 
 
-const Movies = (props) => {
-  const { classes } = props
-
+const Movies = ({ classes }) => {
   const { loading, error, data, fetchMore } = useQuery(ALL_MOVIES)
 
   const {

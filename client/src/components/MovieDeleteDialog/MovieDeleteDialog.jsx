@@ -9,7 +9,7 @@ import { ALL_DIRECTORS } from '../Directors/queries'
 
 import { 
   Dialog, DialogActions, DialogTitle, DialogContentText,
-  Button
+  Button, withStyles
 } from '@material-ui/core'
 
 
@@ -24,8 +24,15 @@ export const REMOVE_MOVIE = gql`
   }
 `
 
+const styles = {
+  body: {
+    padding: '10px 15px'
+  }
+}
+
+
 const MovieDeleteDialog = props => {
-  const { movieId, setMovieId, onDeleted } = props
+  const { movieId, setMovieId, onDeleted, classes } = props
 
   const handleClose = () => setMovieId(null)
 
@@ -47,7 +54,7 @@ const MovieDeleteDialog = props => {
   return(
     <Dialog open={ !!movieId } onClose={handleClose}>
       <DialogTitle>Deleting Movie</DialogTitle>
-      <DialogContentText>
+      <DialogContentText className={classes.body}>
         Are you sure you want to delete this movie?
       </DialogContentText>
       <DialogActions>
@@ -69,4 +76,4 @@ MovieDeleteDialog.defaultProps = {
 }
 
 
-export default MovieDeleteDialog
+export default withStyles(styles)(MovieDeleteDialog)

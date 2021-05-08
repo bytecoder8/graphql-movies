@@ -11,9 +11,7 @@ import DirectorsSearch from './DirectorsSearch'
 import useSearch from '../../hooks/search'
 
 
-const Directors = (props) => {
-  const { classes } = props
-  
+const Directors = ({ classes }) => {
   const { loading, error, data, fetchMore } = useQuery(ALL_DIRECTORS)
 
   const {
